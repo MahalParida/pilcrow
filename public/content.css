@@ -1,0 +1,87 @@
+/*
+ * Page-level styles for Pilcrow. These must live in a static file rather than
+ * the shadow root, because `::highlight()` only resolves against the document
+ * that owns the ranges, and the input mirror is a real element in the page.
+ */
+
+/* ---- Custom Highlight API decorations (contenteditable) ------------------ */
+
+::highlight(pilcrow-spelling),
+::highlight(pilcrow-grammar) {
+  text-decoration: underline wavy #dc2626;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-punctuation) {
+  text-decoration: underline wavy #ea580c;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-clarity) {
+  text-decoration: underline wavy #2563eb;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-conciseness) {
+  text-decoration: underline wavy #0d9488;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-vocabulary) {
+  text-decoration: underline wavy #7c3aed;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-style) {
+  text-decoration: underline wavy #c026d3;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+::highlight(pilcrow-inclusivity) {
+  text-decoration: underline wavy #0891b2;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+
+/* ---- Mirror overlay for <input> and <textarea> --------------------------- */
+
+.pilcrow-mirror {
+  all: initial;
+  position: fixed;
+  z-index: 2147482000;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+  margin: 0;
+  background: transparent;
+  color: transparent;
+  border-color: transparent;
+  border-style: solid;
+  -webkit-text-fill-color: transparent;
+}
+
+.pilcrow-mirror-inner {
+  display: block;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  will-change: transform;
+}
+
+.pilcrow-hl {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness: 1px;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+}
+
+.pilcrow-hl-spelling,
+.pilcrow-hl-grammar { text-decoration-color: #dc2626; }
+.pilcrow-hl-punctuation { text-decoration-color: #ea580c; }
+.pilcrow-hl-clarity { text-decoration-color: #2563eb; }
+.pilcrow-hl-conciseness { text-decoration-color: #0d9488; }
+.pilcrow-hl-vocabulary { text-decoration-color: #7c3aed; }
+.pilcrow-hl-style { text-decoration-color: #c026d3; }
+.pilcrow-hl-inclusivity { text-decoration-color: #0891b2; }

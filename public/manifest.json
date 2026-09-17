@@ -1,0 +1,82 @@
+{
+  "manifest_version": 3,
+  "name": "Pilcrow \u2014 private on-device writing assistant",
+  "short_name": "Pilcrow",
+  "version": "1.0.0",
+  "description": "Grammar, clarity, tone, rewriting and translation powered entirely by Chrome's built-in AI. Nothing ever leaves your browser.",
+  "minimum_chrome_version": "138",
+  "permissions": [
+    "storage",
+    "offscreen",
+    "sidePanel",
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "exclude_matches": [
+        "*://*.google.com/recaptcha/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "match_about_blank": false
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "options_page": "options/index.html",
+  "action": {
+    "default_title": "Pilcrow",
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+W"
+      },
+      "description": "Open the Pilcrow popup"
+    },
+    "check-now": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Re-check the focused text field"
+    },
+    "accept-first": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "Accept the first suggestion in the focused field"
+    }
+  }
+}

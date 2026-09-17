@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pilcrow</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="app-head">
+      <span class="brand"><span class="mark">¶</span> Pilcrow</span>
+      <span id="privacy" class="chip privacy" data-state="checking" title="Checking the on-device model…"><span class="dot"></span>On-device</span>
+    </header>
+
+    <div class="body">
+      <div id="status" class="status">
+        <span class="spinner"></span><span>Checking the model…</span>
+      </div>
+
+      <button id="open-panel" class="primary block">Open the side panel</button>
+
+      <div class="toggles">
+        <label class="toggle">
+          <input id="enabled" type="checkbox" />
+          <span>Suggestions on</span>
+        </label>
+        <label class="toggle">
+          <input id="site" type="checkbox" />
+          <span id="site-label">Enabled on this site</span>
+        </label>
+      </div>
+
+      <div id="download" hidden>
+        <button id="warmup" class="block">Download the model now</button>
+        <div id="progress" class="muted" style="margin-top: 6px"></div>
+      </div>
+
+      <div class="row footer">
+        <button id="options" class="ghost small">Settings</button>
+        <span class="spacer"></span>
+        <span class="muted" style="font-size: 11px">Alt+Shift+C rechecks</span>
+      </div>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

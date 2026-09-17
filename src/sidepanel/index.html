@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pilcrow</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-head">
+        <span class="brand"><span class="mark">¶</span> Pilcrow</span>
+        <span id="privacy" class="chip privacy" data-state="checking" title="Checking the on-device model…"><span class="dot"></span>On-device</span>
+        <button id="settings" class="ghost small" title="Settings">⚙</button>
+      </header>
+
+      <div id="notice" class="notice" hidden></div>
+
+      <section class="summary">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 44 44" aria-hidden="true">
+            <circle class="ring-track" cx="22" cy="22" r="19" />
+            <circle id="ring-value" class="ring-value" cx="22" cy="22" r="19" />
+          </svg>
+          <div class="ring-label"><strong id="score">—</strong><span>score</span></div>
+        </div>
+        <div class="summary-right">
+          <div id="field-label" class="muted">No text field focused</div>
+          <div id="tones" class="row wrap tones"></div>
+        </div>
+      </section>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="suggestions" role="tab">
+          Suggestions<span id="count" class="badge-count"></span>
+        </button>
+        <button class="tab" data-tab="tools" role="tab">Tools</button>
+        <button class="tab" data-tab="insights" role="tab">Insights</button>
+      </nav>
+
+      <main>
+        <section data-panel="suggestions">
+          <div class="row toolbar">
+            <button id="recheck" class="small">Recheck</button>
+            <button id="accept-all" class="small">Accept all</button>
+            <span class="spacer"></span>
+            <span id="busy" class="muted" hidden><span class="spinner"></span></span>
+          </div>
+          <div id="suggestions"></div>
+        </section>
+
+        <section data-panel="tools" hidden>
+          <div class="card tool">
+            <h3>Rewrite the field</h3>
+            <div class="row wrap">
+              <select id="rw-tone" aria-label="Tone">
+                <option value="as-is">Keep tone</option>
+                <option value="more-formal">More formal</option>
+                <option value="more-casual">More casual</option>
+              </select>
+              <select id="rw-length" aria-label="Length">
+                <option value="as-is">Same length</option>
+                <option value="shorter">Shorter</option>
+                <option value="longer">Longer</option>
+              </select>
+            </div>
+            <label class="field" style="margin-top: 8px">
+              <span>Extra instruction (optional)</span>
+              <input id="rw-instruction" type="text" placeholder="e.g. lead with the ask" />
+            </label>
+            <button id="rw-run" class="primary small">Rewrite</button>
+            <div id="rw-out" class="result" hidden></div>
+            <div class="row" id="rw-actions" hidden style="margin-top: 8px">
+              <button id="rw-apply" class="small primary">Replace field</button>
+              <button id="rw-copy" class="small">Copy</button>
+            </div>
+          </div>
+
+          <div class="card tool">
+            <h3>Draft something new</h3>
+            <label class="field">
+              <span>What should it say?</span>
+              <textarea id="cp-instruction" placeholder="Reply saying I can join Thursday but not Friday"></textarea>
+            </label>
+            <div class="row wrap">
+              <select id="cp-tone" aria-label="Tone">
+                <option value="neutral">Neutral</option>
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
+              </select>
+              <select id="cp-length" aria-label="Length">
+                <option value="short">Short</option>
+                <option value="medium" selected>Medium</option>
+                <option value="long">Long</option>
+              </select>
+              <label class="row small-check">
+                <input id="cp-context" type="checkbox" checked />
+                <span>Use field as context</span>
+              </label>
+            </div>
+            <button id="cp-run" class="primary small" style="margin-top: 8px">Draft</button>
+            <div id="cp-out" class="result" hidden></div>
+            <div class="row" id="cp-actions" hidden style="margin-top: 8px">
+              <button id="cp-apply" class="small primary">Insert</button>
+              <button id="cp-copy" class="small">Copy</button>
+            </div>
+          </div>
+
+          <div class="card tool">
+            <h3>Summarise</h3>
+            <div class="row wrap">
+              <select id="sm-type" aria-label="Summary type">
+                <option value="key-points">Key points</option>
+                <option value="tldr">TL;DR</option>
+                <option value="teaser">Teaser</option>
+                <option value="headline">Headline</option>
+              </select>
+              <button id="sm-run" class="primary small">Summarise</button>
+            </div>
+            <div id="sm-out" class="result" hidden></div>
+          </div>
+
+          <div class="card tool">
+            <h3>Translate</h3>
+            <div class="row wrap">
+              <select id="tr-target" aria-label="Target language"></select>
+              <button id="tr-run" class="primary small">Translate</button>
+            </div>
+            <div id="tr-out" class="result" hidden></div>
+            <div class="row" id="tr-actions" hidden style="margin-top: 8px">
+              <button id="tr-apply" class="small primary">Replace field</button>
+              <button id="tr-copy" class="small">Copy</button>
+            </div>
+          </div>
+        </section>
+
+        <section data-panel="insights" hidden>
+          <div class="card">
+            <h3>Document</h3>
+            <div id="stats" class="stats"></div>
+          </div>
+          <div class="card" style="margin-top: 10px">
+            <h3>Readability</h3>
+            <div id="readability"></div>
+          </div>
+          <div class="card" style="margin-top: 10px">
+            <h3>Writing goals</h3>
+            <div class="goals">
+              <label class="field">
+                <span>Audience</span>
+                <select id="goal-audience">
+                  <option value="general">General</option>
+                  <option value="knowledgeable">Knowledgeable</option>
+                  <option value="expert">Expert</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Formality</span>
+                <select id="goal-formality">
+                  <option value="informal">Informal</option>
+                  <option value="neutral">Neutral</option>
+                  <option value="formal">Formal</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Domain</span>
+                <select id="goal-domain">
+                  <option value="general">General</option>
+                  <option value="academic">Academic</option>
+                  <option value="business">Business</option>
+                  <option value="technical">Technical</option>
+                  <option value="creative">Creative</option>
+                  <option value="casual">Casual</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Intent</span>
+                <select id="goal-intent">
+                  <option value="inform">Inform</option>
+                  <option value="describe">Describe</option>
+                  <option value="convince">Convince</option>
+                  <option value="tell-story">Tell a story</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

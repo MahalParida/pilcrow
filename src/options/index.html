@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pilcrow settings</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1><span class="mark">¶</span> Pilcrow</h1>
+        <p class="muted">
+          A writing assistant that runs entirely inside Chrome. Your text is never uploaded,
+          never stored on a server, and works with the network switched off.
+        </p>
+      </header>
+
+      <section id="welcome" class="card welcome" hidden>
+        <h2>Welcome</h2>
+        <p>
+          Pilcrow uses Chrome's built-in Gemini Nano model. The first check downloads the
+          model once (a few gigabytes) and then everything happens locally.
+        </p>
+        <p class="muted">
+          Requirements: Chrome 138+ on desktop, ~22&nbsp;GB free disk space, and either a GPU with
+          more than 4&nbsp;GB of VRAM or a 4-core CPU with 16&nbsp;GB RAM.
+        </p>
+        <button id="welcome-dismiss" class="small">Got it</button>
+      </section>
+
+      <section class="card">
+        <h2>Model status</h2>
+        <div id="capabilities" class="caps"><span class="spinner"></span></div>
+        <div class="row" style="margin-top: 12px">
+          <button id="download-all" class="small primary">Download models</button>
+          <span id="download-status" class="muted"></span>
+        </div>
+        <div id="download-errors" class="download-errors" hidden></div>
+        <p class="muted" style="margin-top: 10px">
+          Some APIs are still experimental in Chrome. Pilcrow falls back to the Prompt API
+          whenever a specialised one is missing, so every feature keeps working — enabling the
+          flags below just makes them faster and more precise.
+        </p>
+        <details style="margin-top: 8px">
+          <summary>Enable the experimental APIs</summary>
+          <ol class="flags">
+            <li><code>chrome://flags/#proofreader-api</code> — precise grammar and spelling ranges</li>
+            <li><code>chrome://flags/#rewriter-api</code> — faster rewriting</li>
+            <li><code>chrome://flags/#writer-api</code> — faster drafting</li>
+            <li>Restart Chrome, then reopen this page.</li>
+          </ol>
+        </details>
+      </section>
+
+      <section class="card">
+        <h2>Diagnostics</h2>
+        <p class="muted">
+          Runs a real request through every layer — this page, the service worker, the engine
+          host and the content script — and reports exactly where it breaks.
+        </p>
+        <div class="row">
+          <button id="diag-run" class="small primary">Run diagnostics</button>
+          <button id="diag-copy" class="small" hidden>Copy report</button>
+          <span id="diag-status" class="muted"></span>
+        </div>
+        <pre id="diag-out" class="diag" hidden></pre>
+      </section>
+
+      <section class="card">
+        <h2>General</h2>
+        <label class="toggle"><input id="enabled" type="checkbox" /><span>Turn suggestions on</span></label>
+        <label class="toggle"><input id="autoCheck" type="checkbox" /><span>Check automatically as I type</span></label>
+        <label class="toggle"><input id="showBadge" type="checkbox" /><span>Show the status badge on text fields</span></label>
+        <label class="toggle"><input id="showInlineHighlights" type="checkbox" /><span>Underline issues inline</span></label>
+        <label class="field" style="max-width: 320px; margin-top: 12px">
+          <span>Wait this long after I stop typing: <b id="debounce-value"></b></span>
+          <input id="debounceMs" type="range" min="300" max="3000" step="100" />
+        </label>
+        <label class="field" style="max-width: 320px">
+          <span>Check text as</span>
+          <select id="checkLanguage"></select>
+        </label>
+        <label class="field" style="max-width: 320px">
+          <span>Translate into</span>
+          <select id="translateTo"></select>
+        </label>
+        <p class="muted" style="font-size: 12px">
+          Used by the right-click “Translate” action. The side panel’s own picker changes it too.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>What to check</h2>
+        <div id="categories" class="categories"></div>
+      </section>
+
+      <section class="card">
+        <h2>House style rules</h2>
+        <p class="muted">
+          One rule per line, in plain English. These are enforced on every check and reported
+          under “Style”.
+        </p>
+        <textarea id="styleRules" rows="6" placeholder="Never use the passive voice&#10;Write “sign in”, not “login”, as a verb&#10;Avoid exclamation marks in customer emails"></textarea>
+        <button id="save-rules" class="small primary" style="margin-top: 8px">Save rules</button>
+        <span id="rules-saved" class="muted" style="margin-left: 8px" hidden>Saved</span>
+      </section>
+
+      <section class="card">
+        <h2>Personal dictionary</h2>
+        <div class="row">
+          <input id="dict-input" type="text" placeholder="Add a word Pilcrow should never flag" />
+          <button id="dict-add" class="small">Add</button>
+        </div>
+        <div id="dictionary" class="tags"></div>
+      </section>
+
+      <section class="card">
+        <h2>Snippets</h2>
+        <p class="muted">Type the trigger in any text field and it expands instantly.</p>
+        <div class="row">
+          <input id="snip-trigger" type="text" placeholder="Trigger, e.g. ;sig" style="max-width: 160px" />
+          <input id="snip-text" type="text" placeholder="Expands to…" />
+          <button id="snip-add" class="small">Add</button>
+        </div>
+        <div id="snippets" class="snippets"></div>
+      </section>
+
+      <section class="card">
+        <h2>Sites where Pilcrow stays quiet</h2>
+        <div class="row">
+          <input id="site-input" type="text" placeholder="example.com" />
+          <button id="site-add" class="small">Add</button>
+        </div>
+        <div id="sites" class="tags"></div>
+      </section>
+
+      <section class="card">
+        <h2>Your data</h2>
+        <p class="muted">
+          Pilcrow has no server, no account and no analytics. Text you write is passed to
+          Chrome's on-device model and discarded. Your settings, dictionary and snippets are
+          stored in Chrome's own extension storage.
+        </p>
+        <button id="reset" class="small">Reset everything</button>
+      </section>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

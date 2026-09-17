@@ -1,0 +1,28 @@
+{
+  "name": "pilcrow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "On-device writing assistant for Chrome. All processing stays in the browser.",
+  "scripts": {
+    "build": "npm run build:main && npm run build:content",
+    "build:main": "vite build",
+    "build:content": "vite build --config vite.content.config.ts",
+    "dev:main": "vite build --watch",
+    "dev:content": "vite build --config vite.content.config.ts --watch",
+    "typecheck": "tsc --noEmit",
+    "icons": "node scripts/make-icons.mjs",
+    "store:assets": "node scripts/store-assets.mjs",
+    "clean": "rm -rf dist",
+    "package": "npm run check && node scripts/package.mjs",
+    "test": "esbuild scripts/selftest.ts --bundle --platform=node --format=esm --alias:@=./src --outfile=.tmp/selftest.mjs --log-level=error && node .tmp/selftest.mjs",
+    "check": "npm run typecheck && npm run test && npm run build && npm run check:contexts",
+    "check:contexts": "node scripts/check-contexts.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "@types/node": "^26.5.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pilcrow — Privacy Policy</title>
+    <meta name="description" content="Privacy policy for the Pilcrow Chrome extension: no server, no account, no analytics." />
+    <style>
+      :root {
+        --bg: #ffffff; --surface: #fafafa; --fg: #18181b; --muted: #71717a;
+        --line: #e4e4e7; --accent: #4f46e5; --good: #16a34a; --warn: #b45309;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #131316; --surface: #1b1b1f; --fg: #f4f4f5; --muted: #a1a1aa;
+          --line: #2e2e33; --accent: #818cf8; --good: #4ade80; --warn: #fbbf24;
+        }
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: var(--surface); color: var(--fg);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-size: 16px; line-height: 1.65;
+      }
+      .wrap { max-width: 720px; margin: 0 auto; padding: 56px 20px 80px; }
+      header { margin-bottom: 32px; }
+      h1 { font-size: 27px; letter-spacing: -0.02em; margin-bottom: 6px; }
+      h1 .mark { color: var(--accent); }
+      h2 { font-size: 18px; margin: 34px 0 10px; }
+      h3 { font-size: 15px; margin: 20px 0 6px; }
+      p, li { color: var(--fg); }
+      p + p { margin-top: 12px; }
+      ul { margin: 10px 0 0 20px; }
+      li { margin-bottom: 7px; }
+      .muted { color: var(--muted); }
+      .lede {
+        border-left: 3px solid var(--accent); background: var(--bg);
+        border: 1px solid var(--line); border-left: 3px solid var(--accent);
+        border-radius: 10px; padding: 16px 18px; margin-top: 18px;
+      }
+      .note {
+        border: 1px solid var(--line); border-left: 3px solid var(--warn);
+        border-radius: 10px; padding: 14px 16px; margin-top: 14px;
+        background: var(--bg); font-size: 15px;
+      }
+      table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 15px; }
+      th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em; }
+      code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: 0.9em; }
+      footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+      a { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1><span class="mark">¶</span> Pilcrow — Privacy Policy</h1>
+        <p class="muted">Last updated 10 September 2026</p>
+      </header>
+
+      <div class="lede">
+        <p>
+          <strong>Pilcrow has no server, no account and no analytics.</strong> The text you write is
+          passed to Chrome's built-in on-device AI model and discarded. It is never uploaded,
+          never logged, and never seen by the developer or anyone else.
+        </p>
+      </div>
+
+      <h2>The text you write</h2>
+      <p>
+        When Pilcrow checks a text field, the contents of that field are passed to Chrome's
+        built-in AI APIs — the Prompt, Proofreader, Rewriter, Writer, Summarizer, Translator and
+        Language Detector models that run <em>inside your browser, on your own machine</em>.
+      </p>
+      <p>
+        No network request is made. Pilcrow works with the network switched off. Nothing is
+        written to disk, and nothing is retained after the suggestions are produced.
+      </p>
+
+      <h2>What is stored, and where</h2>
+      <p>Pilcrow keeps your own configuration in Chrome's extension storage:</p>
+      <table>
+        <thead>
+          <tr><th>Data</th><th>Storage</th><th>Leaves your device?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Settings — categories, writing goals, house-style rules, quiet-site list, languages</td>
+            <td><code>chrome.storage.sync</code></td>
+            <td>Only through Chrome Sync, if you have it on</td>
+          </tr>
+          <tr>
+            <td>Personal dictionary</td>
+            <td><code>chrome.storage.local</code></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Snippets</td>
+            <td><code>chrome.storage.local</code></td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <p>
+          <strong>One honest caveat about settings.</strong> Settings are stored in
+          <code>chrome.storage.sync</code> so they follow you between computers. If you are signed
+          into Chrome with sync enabled, Chrome — not Pilcrow — copies them through your Google
+          account, under
+          <a href="https://policies.google.com/privacy">Google's privacy policy</a>. This affects
+          your settings only, including any house-style rules you write. It never affects the text
+          you are checking, your dictionary or your snippets, which stay on the device.
+        </p>
+      </div>
+
+      <h2>What Pilcrow never does</h2>
+      <ul>
+        <li>No accounts, sign-in or user identifiers of any kind.</li>
+        <li>No analytics, telemetry, crash reporting or usage statistics.</li>
+        <li>No advertising, and no data sold, rented or shared with anybody.</li>
+        <li>No remote code — every line that runs is bundled in the extension package.</li>
+        <li>No third-party services, SDKs or trackers.</li>
+        <li>No reading or transmitting of page content beyond the text field you are working in.</li>
+      </ul>
+
+      <h2>Permissions, and why each one exists</h2>
+      <table>
+        <tbody>
+          <tr><td><code>storage</code></td><td>Saves your settings, dictionary and snippets, as described above.</td></tr>
+          <tr><td><code>offscreen</code></td><td>Chrome's AI APIs do not exist in a service worker. Pilcrow hosts them in an offscreen document, which is the only context where they are available.</td></tr>
+          <tr><td><code>sidePanel</code></td><td>Shows suggestions and tools in Chrome's side panel.</td></tr>
+          <tr><td><code>contextMenus</code></td><td>Adds the right-click actions for selected text.</td></tr>
+          <tr><td><code>activeTab</code> and <code>scripting</code></td><td>Lets the popup and the diagnostics page reach the tab you are looking at.</td></tr>
+          <tr>
+            <td><code>&lt;all_urls&gt;</code></td>
+            <td>
+              A writing assistant has to work in whatever text field you are typing in, and there is
+              no fixed list of sites where people write. Access is used solely to read and edit the
+              focused text field. You can switch Pilcrow off for any site from the popup, or list
+              sites to stay quiet on in Settings.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Model downloads</h2>
+      <p>
+        The first check downloads Chrome's on-device model. That download is performed by
+        <em>Chrome itself</em>, from Google, and is governed by Google's terms — Pilcrow only asks
+        Chrome whether the model is ready and, if you press the button, to fetch it. Once it is on
+        your machine, no further network access is needed.
+      </p>
+
+      <h2>Deleting your data</h2>
+      <p>
+        <strong>Settings → Your data → Reset everything</strong> erases every setting, dictionary
+        entry and snippet. Uninstalling the extension removes all of it as well. Because there is
+        no server, there is nothing else to delete and no request to make of anyone.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        Pilcrow collects no personal information from anyone, of any age.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        If this policy changes, the date at the top of the page changes with it, and the previous
+        wording stays in the repository's history.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy: <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a>
+      </p>
+
+      <footer>
+        Pilcrow is an open-source Chrome extension. Nothing you write with it reaches a server,
+        because there is no server to reach.
+      </footer>
+    </div>
+  </body>
+</html>
