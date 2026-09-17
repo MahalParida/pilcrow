@@ -3,7 +3,7 @@
 // Source maps are stripped: they are useful in `dist/` for local debugging but
 // triple the upload size and ship the whole source tree to every user.
 import { execFileSync } from 'node:child_process';
-import { readFileSync, rmSync } from 'node:fs';
+import { copyFileSync, readFileSync, rmSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,6 +19,7 @@ if (manifest.version !== pkg.version) {
 }
 
 const out = resolve(root, `pilcrow-${manifest.version}.zip`);
+copyFileSync(resolve(root, 'LICENSE'), resolve(root, 'dist/LICENSE'));
 rmSync(out, { force: true });
 // -x on *.map, and the store rejects the __MACOSX/.DS_Store noise the Finder adds.
 execFileSync('zip', ['-r', '-q', out, '.', '-x', '*.map', '.DS_Store', '__MACOSX/*'], {
