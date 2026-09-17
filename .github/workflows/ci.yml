@@ -40,6 +40,19 @@ jobs:
           NODE
       - name: Typecheck, test, build, validate contexts, and package
         run: npm run package
+      - name: Install browser test dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Test extension in Chromium
+        run: node tests/e2e/prepare.mjs && npx playwright test
+      - name: Save browser test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-test-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
       - name: Save extension ZIP
         uses: actions/upload-artifact@v7
         with:
