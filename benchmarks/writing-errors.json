@@ -1,0 +1,14 @@
+[
+  {"id":"spelling-1","text":"Please send teh report tomorrow.","expected":[{"original":"teh","replacement":"the"}]},
+  {"id":"spelling-2","text":"We will recieve the package tomorrow.","expected":[{"original":"recieve","replacement":"receive"}]},
+  {"id":"spelling-3","text":"The meeting is definately scheduled for Monday.","expected":[{"original":"definately","replacement":"definitely"}]},
+  {"id":"agreement-1","text":"She go to the office every morning.","expected":[{"original":"go","replacement":"goes"}]},
+  {"id":"agreement-2","text":"These documents is ready for review.","expected":[{"original":"is","replacement":"are"}]},
+  {"id":"tense-1","text":"Yesterday, I walk to the library.","expected":[{"original":"walk","replacement":"walked"}]},
+  {"id":"article-1","text":"She bought a umbrella before the storm.","expected":[{"original":"a umbrella","replacement":"an umbrella"}]},
+  {"id":"apostrophe-1","text":"I cant attend the meeting tomorrow.","expected":[{"original":"cant","replacement":"can't"}]},
+  {"id":"clean-1","text":"Please send the report tomorrow.","expected":[]},
+  {"id":"clean-2","text":"These documents are ready for review.","expected":[]},
+  {"id":"clean-3","text":"She bought an umbrella before the storm.","expected":[]},
+  {"id":"clean-4","text":"The team finished the work ahead of schedule.","expected":[]}
+]

@@ -1,12 +1,37 @@
 # ¶ Pilcrow
 
-A writing assistant for Chrome that never sends your text anywhere.
+An on-device writing assistant for Chrome, built with TypeScript and Gemini Nano.
 
 Pilcrow does what Grammarly does — inline grammar, spelling and punctuation
 underlines, clarity and conciseness rewrites, tone detection, a writing score, a
 personal dictionary, writing goals — using Chrome's **built-in Gemini Nano
-model**. There is no server, no account, and no network request. It works with
-Wi-Fi switched off.
+model**. Pilcrow has no application backend or analytics. Inference is designed
+to run locally after model download. Settings can sync through your Google
+account; real-model offline and browser-wide network verification are still
+pending (see [measurement status](benchmarks/README.md)).
+
+[Try the latest release](https://github.com/MahalParida/pilcrow/releases/latest)
+· [MIT license](LICENSE) · [Test coverage](tests/README.md)
+
+## Demo
+
+[Watch the 60–90 second UI walkthrough](docs/media/ui-demo.webm) ·
+[Download the video](https://github.com/MahalParida/pilcrow/raw/refs/heads/main/docs/media/ui-demo.webm)
+
+![Accepting spelling corrections in the real extension UI](docs/media/corrections.gif)
+
+**Demo scope:** real content script, service worker, offscreen messaging, editor
+adapters, and UI; deterministic simulated engine responses. This demonstrates
+interaction behavior, not Gemini Nano accuracy or inference speed. The video
+covers accepting corrections, explanations, rich-text formatting/undo, and the
+personal dictionary. Reproduce it with `npm run demo:record`.
+
+| Inline suggestions | Rich-text editing |
+| --- | --- |
+| ![Spelling suggestion card](docs/media/01-suggestion.png) | ![Rich-text suggestion with formatting preserved](docs/media/04-rich-text.png) |
+
+The older `store/screenshot-*.png` assets are staged listing illustrations,
+not evidence of a live inference session.
 
 ## Requirements
 
@@ -17,7 +42,15 @@ Wi-Fi switched off.
 | GPU | more than 4 GB VRAM, **or** a 4-core CPU with 16 GB RAM |
 | OS | Windows 10/11, macOS 13+, Linux, ChromeOS |
 
-## Install
+## Try the release
+
+Download `pilcrow-1.0.0.zip` from [GitHub Releases](https://github.com/MahalParida/pilcrow/releases),
+unzip it into a permanent folder, open `chrome://extensions`, enable
+**Developer mode**, and choose **Load unpacked** with that folder. Download the
+models from the extension popup. This is an unpacked developer installation;
+a Chrome Web Store listing is not yet available.
+
+## Install from source
 
 ```bash
 npm install
@@ -65,11 +98,11 @@ Restart Chrome. The options page shows which APIs are live.
 - Personal dictionary, per-site disabling, snippets with typed triggers
 - Word/character/sentence counts, reading and speaking time, Flesch reading
   ease, Flesch–Kincaid grade level, passive-voice ratio
-- Works in `<input>`, `<textarea>` and `[contenteditable]` across every site
+- Supports `<input>`, `<textarea>` and `[contenteditable]`; complex third-party editors still need compatibility testing
 
 **Beyond Grammarly**
 
-- **Fully local.** No text leaves the browser, ever.
+- **On-device inference.** Writing is processed by Chrome’s built-in models; see the measurement status above for verification limits.
 - **Translate** any field or selection into 20 languages, on device
 - **Summarise** a field or selection (key points, TL;DR, teaser, headline)
 - **"Why?"** — an on-demand explanation of any individual suggestion
@@ -214,10 +247,12 @@ failed. Language packs are per-pair, so `en → es` downloading does not mean
 
 ```bash
 npm run typecheck        # tsc --noEmit
-npm run test             # 48 assertions on offsets, anchoring, stats, scoring
+npm run test             # 67 checks on offsets, anchoring, stats, scoring
 npm run build            # writes dist/
 npm run check:contexts   # asserts each bundle only uses APIs its context has
 npm run check            # all four
+npx playwright install chromium # one-time browser install
+npm run test:e2e         # 9 browser tests; builds first
 npm run icons       # regenerate the PNG icons
 
 npm run dev:main    # watch build for background + panels
@@ -234,15 +269,21 @@ place far from their cause. It walks every bundle's import graph and rejects any
 
 `npm run test` covers the DOM-free logic — sentence splitting with exact
 offsets, suggestion anchoring, dictionary and category filtering, proofreader
-precedence, statistics and scoring. The adapters and UI need a real browser and
-are not covered.
+precedence, statistics and scoring. `npm run test:e2e` adds nine Chromium tests
+for editor adapters, correction UI, stale results, rich-text undo, excluded
+password fields, offline UI behavior with a simulated engine, and persistent
+settings/dictionary using the unmodified extension. See [test scope and limitations](tests/README.md).
+
+Real-model latency, memory, accuracy and offline/network results are not yet
+reported. The [measurement protocol and 12-case dataset](benchmarks/README.md)
+make the remaining work explicit; synthetic tests are not used as AI benchmarks.
 
 ## CI and releases
 
 [GitHub Actions](.github/workflows/ci.yml) runs on branch pushes, pull requests,
 version tags, and manual dispatch. It uses Node.js 22 and `npm ci`, then runs
 `npm run package`: type checking, tests, both builds, extension-context checks,
-and ZIP packaging. Successful runs keep a `pilcrow-extension` artifact for 14 days.
+and ZIP packaging, followed by the Chromium browser suite. Successful runs keep a `pilcrow-extension` artifact for 14 days.
 
 To publish a GitHub Release, keep the versions in `package.json`,
 `package-lock.json`, and `public/manifest.json` aligned, commit and push the
@@ -271,3 +312,7 @@ src/sidepanel/     suggestions, tools and insights
 src/options/       settings, dictionary, snippets, style rules
 src/popup/         status and quick toggles
 ```
+
+## License
+
+[MIT](LICENSE). Chrome and its built-in models are separate software and are not covered by this license.
