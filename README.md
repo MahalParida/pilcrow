@@ -1,37 +1,36 @@
 # ¶ Pilcrow
 
-An on-device writing assistant for Chrome, built with TypeScript and Gemini Nano.
+Pilcrow is a writing assistant for Chrome that I started as a personal project
+and have now opened up. It checks spelling, grammar and punctuation, and has a
+few writing tools like rewrites, translation and summaries. It uses Chrome's
+built-in Gemini Nano APIs.
 
-Pilcrow does what Grammarly does — inline grammar, spelling and punctuation
-underlines, clarity and conciseness rewrites, tone detection, a writing score, a
-personal dictionary, writing goals — using Chrome's **built-in Gemini Nano
-model**. Pilcrow has no application backend or analytics. Inference is designed
-to run locally after model download. Settings can sync through your Google
-account; real-model offline and browser-wide network verification are still
-pending (see [measurement status](benchmarks/README.md)).
+I wanted the writing itself to stay on the device. Pilcrow has no application
+backend or analytics, and model requests are intended to run locally once the
+models are downloaded. Settings may sync through your Google account. I have
+not yet finished verifying offline behavior with the real models or checking
+network traffic across the whole browser; see [measurement status](benchmarks/README.md).
 
-[Try the latest release](https://github.com/MahalParida/pilcrow/releases/latest)
-· [MIT license](LICENSE) · [Test coverage](tests/README.md)
+[Download the latest release](https://github.com/MahalParida/pilcrow/releases/latest)
+· [MIT license](LICENSE) · [What the tests cover](tests/README.md)
 
 ## Demo
 
-[Watch the 60–90 second UI walkthrough](docs/media/ui-demo.webm) ·
+[Watch the UI walkthrough](docs/media/ui-demo.webm) ·
 [Download the video](https://github.com/MahalParida/pilcrow/raw/refs/heads/main/docs/media/ui-demo.webm)
 
 ![Accepting spelling corrections in the real extension UI](docs/media/corrections.gif)
 
-**Demo scope:** real content script, service worker, offscreen messaging, editor
-adapters, and UI; deterministic simulated engine responses. This demonstrates
-interaction behavior, not Gemini Nano accuracy or inference speed. The video
-covers accepting corrections, explanations, rich-text formatting/undo, and the
-personal dictionary. Reproduce it with `npm run demo:record`.
+The walkthrough uses the real extension UI and messaging, with a simulated
+engine returning predictable suggestions. It shows how the interactions work;
+it says nothing about model accuracy or speed. To record it again, run
+`npm run demo:record`.
 
 | Inline suggestions | Rich-text editing |
 | --- | --- |
 | ![Spelling suggestion card](docs/media/01-suggestion.png) | ![Rich-text suggestion with formatting preserved](docs/media/04-rich-text.png) |
 
-The older `store/screenshot-*.png` assets are staged listing illustrations,
-not evidence of a live inference session.
+The images in `store/` are listing artwork, not screenshots of a live model.
 
 ## Requirements
 
@@ -42,13 +41,14 @@ not evidence of a live inference session.
 | GPU | more than 4 GB VRAM, **or** a 4-core CPU with 16 GB RAM |
 | OS | Windows 10/11, macOS 13+, Linux, ChromeOS |
 
-## Try the release
+## Install the release
 
 Download `pilcrow-1.0.0.zip` from [GitHub Releases](https://github.com/MahalParida/pilcrow/releases),
 unzip it into a permanent folder, open `chrome://extensions`, enable
 **Developer mode**, and choose **Load unpacked** with that folder. Download the
 models from the extension popup. This is an unpacked developer installation;
-a Chrome Web Store listing is not yet available.
+I haven't published Pilcrow to the Chrome Web Store, so this is a local
+developer installation.
 
 ## Install from source
 
@@ -65,17 +65,15 @@ Then in Chrome:
 4. Open the Pilcrow popup and click **Download the model now**, or use
    **Settings → Model status → Download models** to fetch everything at once
 
-> **The download button is not optional.** Chrome refuses to start a model
-> download without transient user activation — a real click. Nothing that runs
-> in the background can trigger one, so the first download has to be started
-> from the popup or the options page.
+> Chrome requires a direct click to start a model download. Start it from the
+> popup or options page; a background task cannot do it for you.
 
 ## Optional: enable the specialised APIs
 
-Three of Chrome's writing APIs are still behind flags. Pilcrow works without
-them — it falls back to the general Prompt API — but they are faster and, in the
-Proofreader's case, more precise, because it returns exact character offsets
-instead of quoted text that has to be located by search.
+Three of Chrome's writing APIs are still behind flags. Pilcrow falls back to
+the general Prompt API without them. The specialised APIs can be faster, and
+Proofreader returns exact character offsets instead of text that Pilcrow has to
+find in the original.
 
 ```
 chrome://flags/#proofreader-api   → Enabled
@@ -85,9 +83,7 @@ chrome://flags/#writer-api        → Enabled
 
 Restart Chrome. The options page shows which APIs are live.
 
-## What it does
-
-**Grammarly parity**
+## Features
 
 - Inline wavy underlines for spelling, grammar and punctuation
 - Clarity, conciseness and word-choice suggestions
@@ -98,11 +94,11 @@ Restart Chrome. The options page shows which APIs are live.
 - Personal dictionary, per-site disabling, snippets with typed triggers
 - Word/character/sentence counts, reading and speaking time, Flesch reading
   ease, Flesch–Kincaid grade level, passive-voice ratio
-- Supports `<input>`, `<textarea>` and `[contenteditable]`; complex third-party editors still need compatibility testing
+- Supports `<input>`, `<textarea>` and `[contenteditable]`. Some complex
+  third-party editors still need compatibility testing.
 
-**Beyond Grammarly**
-
-- **On-device inference.** Writing is processed by Chrome’s built-in models; see the measurement status above for verification limits.
+- **On-device model calls.** Writing is processed by Chrome’s built-in models;
+  see the measurement status above for what I have and haven't verified.
 - **Translate** any field or selection into 20 languages, on device
 - **Summarise** a field or selection (key points, TL;DR, teaser, headline)
 - **"Why?"** — an on-demand explanation of any individual suggestion
@@ -112,9 +108,8 @@ Restart Chrome. The options page shows which APIs are live.
   the current field as context
 - **Inclusive-language** checks
 
-**Deliberately not included:** plagiarism detection. It requires searching a
-corpus of the whole web, which cannot be done without sending your text to a
-server. That trade-off is the entire point of this extension.
+I haven't added plagiarism detection. It depends on searching a large corpus,
+which doesn't fit the local-only direction of this project.
 
 ## Keyboard shortcuts
 
@@ -140,7 +135,7 @@ popup / options / side panel ─────────────▶ Chrome b
         model downloads only, in-page, on click
 ```
 
-**Why an offscreen document.** Chrome's built-in AI APIs are not exposed to Web
+**Why I use an offscreen document.** Chrome's built-in AI APIs are not exposed to Web
 Workers — the Prompt API, Summarizer, Translator and Language Detector all carry
 that restriction — and an extension service worker *is* a worker, so every one of
 those globals is `undefined` there. The engine therefore lives in an offscreen
@@ -156,11 +151,11 @@ call, and the service worker relays setting changes so warm sessions can be
 dropped. `npm run check:contexts` fails the build if any bundle reaches for an API
 its context does not have.
 
-**Readiness is proven, not assumed.** `createDocument()` resolves before the
+**Waiting for the engine.** `createDocument()` resolves before the
 document's deferred module script has run, so the worker polls a ping message
 and only reports the engine ready once it answers.
 
-**Why downloads are started from the UI.** Chrome requires transient user
+**Why downloads start from the UI.** Chrome requires transient user
 activation before it will fetch a model, and activation does not survive a
 `chrome.runtime` message hop. So the popup, options page and side panel start
 downloads *in their own page* at the moment you click, then hand the actual
@@ -190,9 +185,9 @@ an honest justification string. If Chrome adds a better-fitting reason, switch t
 it. This mismatch is disclosed to Web Store reviewers rather than left to be
 noticed — see the offscreen entry in [store/SUBMISSION.md](store/SUBMISSION.md).
 
-## Something is wrong — start here
+## Diagnostics
 
-Open **Settings → Diagnostics → Run diagnostics**. It sends a real request
+Open **Settings → Diagnostics → Run diagnostics**. It sends a request
 through every layer (this page → service worker → offscreen engine → model, plus
 the content script on your current tab) and prints exactly which one failed, with
 timings. **Copy report** puts the whole thing on the clipboard.
